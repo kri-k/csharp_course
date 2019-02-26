@@ -1,0 +1,109 @@
+﻿<Window x:Class="Lab3.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lab3"
+        mc:Ignorable="d"
+        Title="Контакты" Height="450" Width="800">
+
+    <StackPanel x:Name="root">
+        <DockPanel>
+            <ToolBar>
+                <Button Content="Добавить" Command="{Binding AddCommand}"/>
+                <Button Content="Удалить" Command="{Binding DeleteCommand}"/>
+                <Button Content="Изменить" Command="{Binding ChangeCommand}"/>
+            </ToolBar>
+            <Label Content="Поиск"/>
+            <CheckBox Margin="0, 8, 0, 0" 
+                      DockPanel.Dock="Right" 
+                      Content="Ближайшие дни рождения"
+                      IsChecked="{Binding NearestBirthdays}"/>
+            <TextBox MinHeight="30"
+                     MinWidth="200" 
+                     Text="{Binding Filter, 
+                            Mode=OneWayToSource, 
+                            UpdateSourceTrigger=PropertyChanged}"/>
+        </DockPanel>
+        <Grid ShowGridLines="False">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <ListBox x:Name="AlphabetSearch" ItemsSource="{Binding Alphabet}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <ToggleButton Command="{Binding DataContext.ChangeStartSymbCommand, 
+                                            RelativeSource={RelativeSource AncestorType=Grid}}"
+                                      CommandParameter="{Binding}"
+                                      IsChecked="{Binding IsSelected, 
+                                             Mode=TwoWay, 
+                                             RelativeSource={RelativeSource FindAncestor, 
+                                                             AncestorType={x:Type ListBoxItem}}}"
+                                      Content="{Binding}"
+                                      Width="20"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+
+            <!--<ListBox x:Name="Contacts" ItemsSource="{Binding contacts}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <ToggleButton Command="{Binding DataContext.ChangeStartSymbCommand, 
+                                            RelativeSource={RelativeSource AncestorType=Grid}}"
+                                      CommandParameter="{Binding}"
+                                      IsChecked="{Binding IsSelected, 
+                                             Mode=TwoWay, 
+                                             RelativeSource={RelativeSource FindAncestor, 
+                                                             AncestorType={x:Type ListBoxItem}}}"
+                                      Content="{Binding}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>-->
+            <TreeView Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                <TreeViewItem Header='Контакты'
+                              FontSize="16"
+                              ItemsSource="{Binding contacts}">
+                    <TreeViewItem.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Command="{Binding DataContext.ChangeContactSelectionCommand,
+                                RelativeSource={RelativeSource AncestorType=TreeView}}"
+                                      CommandParameter="{Binding}">
+                                <TreeViewItem Header="{Binding Name}">
+                                    <StackPanel>
+                                    <TreeViewItem Header="Номер телефона">
+                                        <TextBlock Text="{Binding PhoneNumber}"/>
+                                    </TreeViewItem>
+                                    <TreeViewItem Header="Почта">
+                                        <TextBlock Text="{Binding Email}"/>
+                                    </TreeViewItem>
+                                    <TreeViewItem Header="День рождения">
+                                        <TextBlock Text="{Binding Birthday}"/>
+                                    </TreeViewItem>
+                                    <TreeViewItem Header="Комментарий">
+                                        <TextBlock Text="{Binding Comment}"/>
+                                    </TreeViewItem>
+                                    </StackPanel>
+                                </TreeViewItem>
+                            </CheckBox>
+                        </DataTemplate>
+                    </TreeViewItem.ItemTemplate>
+                </TreeViewItem>
+            </TreeView>
+        </Grid>
+    </StackPanel>
+</Window>
